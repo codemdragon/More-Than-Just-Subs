@@ -1,0 +1,284 @@
+{
+  "brand": {
+    "siteName": "More Than Just Subs",
+    "tagline": "London-born. Since 2001.",
+    "email": "info@morethanjustsubs.co.uk",
+    "phone": "+44 20 7589 3134",
+    "mobilePhone": "+44 7340 751433",
+    "website": "https://morethanjustsubs.co.uk",
+    "logoUrl": "",
+    "halalCertified": true,
+    "halalNotice": "100% Halal certified meats & artisan fresh ingredients.",
+    "instagram": "https://www.instagram.com/morethanjustsubs_",
+    "facebook": "https://www.facebook.com/share/1HSKiRsTS9/",
+    "copyright": "© 2026 More Than Just Subs"
+  },
+  "hero": {
+    "eyebrow": "London · Since 2001",
+    "headline1": "More Than",
+    "headline2": "Just Subs.",
+    "body": "Signature subs, artisan bread, and barista coffee. A London original since 2001.",
+    "heroPhoto": "images/hero-sub.jpg",
+    "heroPhotoAlt": "Freshly made signature sub roll with melted cheese and premium fillings",
+    "badgeLabel": "Our best seller",
+    "badgeName": "Signature Sub Melt",
+    "facts": [
+      { "value": "2001", "label": "Serving London since" },
+      { "value": "20+", "label": "Years' experience" },
+      { "value": "2", "label": "London shops" },
+      { "value": "100%", "label": "Halal certified" },
+      { "value": "Daily", "label": "Fresh-baked bread" }
+    ]
+  },
+  "navigation": [
+    { "id": "home", "title": "Home", "path": "/" },
+    { "id": "about", "title": "About", "path": "/about" },
+    { "id": "bread", "title": "Our bread", "path": "/our-bread" },
+    { "id": "menu", "title": "Menu", "path": "/menu" },
+    { "id": "locations", "title": "Locations", "path": "/locations" },
+    { "id": "contact", "title": "Contact", "path": "/contact" }
+  ],
+  "range": [
+    {
+      "name": "Signature subs",
+      "tag": "Made to order",
+      "photo": "images/deal-big-beef.jpg",
+      "path": "/menu",
+      "description": "Our made-to-order favourites on artisan sourdough."
+    },
+    {
+      "name": "Coffee & hot drinks",
+      "tag": "Barista crafted",
+      "photo": "images/drink-cappuccino.jpg",
+      "path": "/menu?category=drinks",
+      "description": "Premium barista coffee, specialty teas, and hot drinks."
+    },
+    {
+      "name": "Artisan bread",
+      "tag": "Baked daily",
+      "photo": "images/artisan-bread-sourdough.jpg",
+      "path": "/our-bread",
+      "description": "Four signature breads, baked daily to our proprietary recipe."
+    }
+  ],
+  "story": {
+    "photo": "images/sub-peri-peri.jpg",
+    "photoAlt": "More Than Just Subs freshly prepared signature sub with fresh salad and melted cheese",
+    "eyebrow": "Our story",
+    "heading": "Rooted in London.",
+    "body": "From our original South Kensington shop to a family-run sub business. Get to know the people behind More Than Just Subs."
+  },
+  "subs": [
+    "Caesar Chicken Melt",
+    "Crispy Chicken Melt",
+    "Beef Pepper Steak Melt",
+    "Chicken Tikka",
+    "BBQ Chicken",
+    "Peri-Peri Chicken",
+    "Chicken Steak Sub",
+    "Turkey BLT",
+    "Falafel Vegan",
+    "Tuna Sweetcorn"
+  ],
+  "drinks": [
+    "Cappuccino",
+    "Espresso",
+    "Flat White",
+    "Macchiato",
+    "White Americano",
+    "English Tea",
+    "Hot Chocolate & Winter Warmers",
+    "Iced Matcha"
+  ],
+  "menuPhotos": {
+    "Caesar Chicken Melt": "images/hero-sub.jpg",
+    "Crispy Chicken Melt": "images/burger-classic-chicken.jpg",
+    "Beef Pepper Steak Melt": "images/deal-big-beef.jpg",
+    "Chicken Tikka": "images/sub-chicken-tikka.jpg",
+    "BBQ Chicken": "images/sub-bbq-chicken.jpg",
+    "Peri-Peri Chicken": "images/sub-peri-peri.jpg",
+    "Chicken Steak Sub": "images/sub-pepperoni-cheese.jpg",
+    "Turkey BLT": "images/sub-blt-turkey.jpg",
+    "Falafel Vegan": "images/sub-falafel-vegan.jpg",
+    "Tuna Sweetcorn": "images/sub-tuna-sweetcorn.jpg",
+    "Cappuccino": "images/drink-cappuccino.jpg",
+    "Espresso": "images/drink-espresso.jpg",
+    "Flat White": "images/drink-flat-white.jpg",
+    "Macchiato": "images/drink-macchiato.jpg",
+    "White Americano": "images/drink-white-americano.jpg",
+    "English Tea": "images/drink-tea.jpg",
+    "Hot Chocolate & Winter Warmers": "images/drink-winter-warmth.jpg",
+    "Iced Matcha": "images/drink-winter-warmth.jpg"
+  },
+  "mealDeals": [
+    { "label": "Regular 6-inch sub", "price": "£7.50" },
+    { "label": "Premium 6-inch sub", "price": "£8.50" },
+    { "label": "Add chips and a drink", "price": "+£3.50" }
+  ],
+  "breadTypes": [
+    { "name": "Black Olive & Herb", "swatch": "#3b3a2c" },
+    { "name": "Brown", "swatch": "#8a5a32" },
+    { "name": "Cheese & Herb", "swatch": "#e0a43c" },
+    { "name": "Plain White", "swatch": "#efe2c8" }
+  ],
+  "bread": {
+    "photo": "images/artisan-bread-sourdough.jpg",
+    "photoAlt": "Four freshly baked artisan sourdough sub rolls on a board",
+    "intro": "Baked fresh daily by our specialist bakery partner, using a recipe made just for us.",
+    "bakeryText": "Our proprietary sourdough recipe is made under agreement with a specialist bakery partner. Fresh bread is the starting point for every sub.",
+    "tagline": "Fresh bread. Better taste."
+  },
+  "locations": [
+    {
+      "slug": "south-kensington",
+      "name": "South Kensington",
+      "photo": "images/storefront-south-kensington.jpg",
+      "photoAlt": "More Than Just Subs storefront at 36 Thurloe St, South Kensington, London",
+      "description": "Branch of small sandwich joint serving coffee, creative hot subs, wraps and bagels, plus meal deals.",
+      "detail": "Located at 36 Thurloe Street right by South Kensington station. Fresh hot subs, artisan bread, bagels, wraps, and barista coffee since 2001.",
+      "address": "36 Thurloe St, South Kensington, London SW7 2LT, United Kingdom",
+      "phone": "+44 20 7589 3134",
+      "hours": "Mon - Sun: 7:00 AM - 7:00 PM",
+      "priceRange": "£10–20 per person",
+      "serviceOptions": ["Dine-in", "Takeout", "Delivery"],
+      "plusCode": "FRVG+PC London, United Kingdom",
+      "rating": 3.5,
+      "reviewCount": 323,
+      "timetable": {
+        "Monday": { "open": "7:00 AM", "close": "7:00 PM", "closed": false },
+        "Tuesday": { "open": "7:00 AM", "close": "7:00 PM", "closed": false },
+        "Wednesday": { "open": "7:00 AM", "close": "7:00 PM", "closed": false },
+        "Thursday": { "open": "7:00 AM", "close": "7:00 PM", "closed": false },
+        "Friday": { "open": "7:00 AM", "close": "7:00 PM", "closed": false },
+        "Saturday": { "open": "7:00 AM", "close": "7:00 PM", "closed": false },
+        "Sunday": { "open": "7:00 AM", "close": "7:00 PM", "closed": false }
+      },
+      "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2484.0276872816644!2d-0.17395239999999998!3d51.49435940000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487605429c913c13%3A0xdf40c6feb7887f3b!2sMORE%20THAN%20JUST%20SUBS!5e0!3m2!1sen!2s!4v1795331899180!5m2!1sen!2s",
+      "mapUrl": "https://maps.app.goo.gl/JnfBmsz3kmnTGDem8"
+    },
+    {
+      "slug": "hounslow",
+      "name": "Hounslow",
+      "photo": "images/storefront-hounslow.jpg",
+      "photoAlt": "More Than Just Subs storefront in Hounslow, London",
+      "description": "Our second London location, bringing our signature hot subs, wraps, and barista coffee to West London.",
+      "detail": "Our Hounslow branch brings the More Than Just Subs menu to another West London neighbourhood.",
+      "address": "High Street, Hounslow TW3",
+      "phone": "+44 7340 751433",
+      "hours": "Mon - Sun: 8:00 AM - 10:00 PM",
+      "priceRange": "£10–20 per person",
+      "serviceOptions": ["Dine-in", "Takeout", "Delivery"],
+      "plusCode": "",
+      "rating": 4.5,
+      "reviewCount": 85,
+      "timetable": {
+        "Monday": { "open": "8:00 AM", "close": "10:00 PM", "closed": false },
+        "Tuesday": { "open": "8:00 AM", "close": "10:00 PM", "closed": false },
+        "Wednesday": { "open": "8:00 AM", "close": "10:00 PM", "closed": false },
+        "Thursday": { "open": "8:00 AM", "close": "10:00 PM", "closed": false },
+        "Friday": { "open": "8:00 AM", "close": "10:00 PM", "closed": false },
+        "Saturday": { "open": "8:00 AM", "close": "10:00 PM", "closed": false },
+        "Sunday": { "open": "8:00 AM", "close": "10:00 PM", "closed": false }
+      },
+      "mapEmbedUrl": "",
+      "mapUrl": ""
+    }
+  ],
+  "about": {
+    "photo": "images/sub-bbq-chicken.jpg",
+    "photoAlt": "Freshly prepared sub with tender fillings",
+    "intro": "A family-run London food brand, built on fresh bread, made-to-order subs, and a loyal local following.",
+    "heritagePhoto": "images/storefront-south-kensington.jpg",
+    "heritagePhotoAlt": "Original South Kensington storefront",
+    "timeline": [
+      {
+        "era": "The original shop",
+        "title": "London beginnings",
+        "text": "John Cox ran the original South Kensington shop before the Pirbai family took it on."
+      },
+      {
+        "era": "2001",
+        "title": "A new chapter",
+        "text": "Brothers Rizwan and Amin Pirbai bought the shop and developed it into a specialist sub business."
+      },
+      {
+        "era": "Today",
+        "title": "More Than Just Subs",
+        "text": "Two London locations, a proprietary sourdough recipe, and a menu made to order."
+      }
+    ],
+    "operations": [
+      {
+        "title": "Freshly assembled",
+        "text": "Signature subs are assembled to order with bread baked daily by our specialist bakery partner."
+      },
+      {
+        "title": "Compact by design",
+        "text": "Ventless rapid-cook ovens support our compact service model, with services assessed for each shop."
+      }
+    ]
+  },
+  "careers": {
+    "photo": "images/sub-peri-peri.jpg",
+    "photoAlt": "Team preparing subs to order",
+    "intro": "Introduce yourself to the More Than Just Subs team in South Kensington or Hounslow."
+  },
+  "contact": {
+    "intro": "For menu questions, shop information, or business enquiries, contact our team."
+  },
+  "reviews": {
+    "summary": { "average": 3.5, "count": 323 },
+    "googleUrl": "https://maps.app.goo.gl/JnfBmsz3kmnTGDem8",
+    "items": [
+      {
+        "name": "LDNDrizzle",
+        "shop": "South Kensington",
+        "rating": 5,
+        "date": "Recent",
+        "text": "Delicious sandwiches! The only downside is the limited seating. But I still try to stop by every time I'm in London."
+      },
+      {
+        "name": "Edward",
+        "shop": "South Kensington",
+        "rating": 5,
+        "date": "Recent",
+        "text": "Delicious, this food tastes so nice and way better than subway and less expensive, recommended."
+      },
+      {
+        "name": "Soraiya Khan",
+        "shop": "South Kensington",
+        "rating": 5,
+        "date": "Recent",
+        "text": "Staff were so nice and the food was amazing at such a good price! Small tables with many seats were available inside too! Excellent experience overall!"
+      },
+      {
+        "name": "Nor Nor",
+        "shop": "South Kensington",
+        "rating": 5,
+        "date": "Recent",
+        "text": "Amazing halal food - honestly! Fresh artisan bread, delicious fillings, and wonderful friendly service."
+      },
+      {
+        "name": "Vatti",
+        "shop": "South Kensington",
+        "rating": 5,
+        "date": "Recent",
+        "text": "We were very satisfied with the food and service. It was very reasonably priced. Thumbs up! 👍🏻"
+      },
+      {
+        "name": "Tünde Vargáné Kovács",
+        "shop": "South Kensington",
+        "rating": 5,
+        "date": "Recent",
+        "text": "The raspberry chocolate cupcake was the most delicious! Tasty subs and lovely atmosphere."
+      },
+      {
+        "name": "XXT",
+        "shop": "South Kensington",
+        "rating": 5,
+        "date": "Recent",
+        "text": "Tasty subs, fresh ingredients, and welcoming staff. Great value right by South Kensington station."
+      }
+    ]
+  }
+}

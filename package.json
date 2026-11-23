@@ -1,0 +1,12 @@
+{
+  "name": "more-than-just-subs",
+  "version": "1.0.0",
+  "description": "More Than Just Subs - London Sandwich Shop & Artisan Bakery (Since 2001)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

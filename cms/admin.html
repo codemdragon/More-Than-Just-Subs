@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Content Manager • More Than Just Subs</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..800;1,9..40,400..800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+      :root {
+        /* Soft, eye-friendly dark palette (Linear / Vercel style) */
+        --cms-bg: #121316;
+        --cms-surface: #17181f;
+        --cms-card: #1d1e27;
+        --cms-card-hover: #232531;
+        --cms-border: #292a36;
+        --cms-border-light: #373849;
+        --cms-input-bg: #14151b;
+        --cms-input-border: #303241;
+        --cms-input-focus: #191a24;
+        
+        --cms-orange: #f47321;
+        --cms-orange-hover: #ff8638;
+        --cms-orange-glow: rgba(244, 115, 33, 0.22);
+        --cms-orange-subtle: rgba(244, 115, 33, 0.1);
+        
+        --cms-text: #f3f4f6;
+        --cms-text-sub: #cbd5e1;
+        --cms-muted: #94a3b8;
+        --cms-dim: #64748b;
+        
+        --cms-danger: #ef4444;
+        --cms-danger-bg: rgba(239, 68, 68, 0.12);
+        --cms-success: #10b981;
+        --cms-warning: #f59e0b;
+
+        --sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        --mono: "IBM Plex Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        --radius: 8px;
+        --radius-lg: 12px;
+        --transition: 0.18s ease;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: var(--sans);
+        background: var(--cms-bg);
+        color: var(--cms-text);
+        line-height: 1.5;
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ------------------------------------------------------------- Global Input Styling */
+      /* Overrides all inputs to prevent browser default stark white background */
+      input, textarea, select {
+        width: 100%;
+        padding: 10px 14px;
+        background: var(--cms-input-bg) !important;
+        color: var(--cms-text) !important;
+        border: 1px solid var(--cms-input-border) !important;
+        border-radius: var(--radius) !important;
+        font: 500 14px var(--sans) !important;
+        line-height: 1.5;
+        transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+      }
+      input:focus, textarea:focus, select:focus {
+        background: var(--cms-input-focus) !important;
+        border-color: var(--cms-orange) !important;
+        outline: none !important;
+        box-shadow: 0 0 0 3px var(--cms-orange-glow) !important;
+      }
+      input::placeholder, textarea::placeholder {
+        color: var(--cms-dim) !important;
+      }
+      select option {
+        background: var(--cms-surface);
+        color: var(--cms-text);
+      }
+
+      /* ------------------------------------------------------------- Toolbar */
+      .cms-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(18, 19, 22, 0.94);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--cms-border);
+        padding: 11px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      .brand-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: inherit;
+        flex-shrink: 0;
+      }
+      .brand-logo-img {
+        height: 36px;
+        width: auto;
+        object-fit: contain;
+        border-radius: 4px;
+        display: block;
+      }
+      .brand-info {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.1;
+      }
+      .brand-title {
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: -0.2px;
+        color: #fff;
+      }
+      .brand-sub {
+        font: 700 10px var(--mono);
+        color: var(--cms-orange);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      /* Search Bar in Header */
+      .cms-search-box {
+        position: relative;
+        flex: 1;
+        max-width: 420px;
+      }
+      .cms-search-box input {
+        padding-left: 36px !important;
+        padding-right: 14px !important;
+        height: 38px;
+        font-size: 13px !important;
+        background: #101115 !important;
+      }
+      .search-icon-svg {
+        position: absolute;
+        left: 11px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        color: var(--cms-dim);
+        pointer-events: none;
+      }
+      .cms-search-results {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        right: 0;
+        background: var(--cms-surface);
+        border: 1px solid var(--cms-border-light);
+        border-radius: var(--radius);
+        max-height: 380px;
+        overflow-y: auto;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+        z-index: 150;
+      }
+      .search-item {
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        transition: background var(--transition);
+      }
+      .search-item:last-child { border-bottom: none; }
+      .search-item:hover { background: rgba(244, 115, 33, 0.1); }
+      .search-item-title { font-size: 13px; font-weight: 600; color: #fff; }
+      .search-item-badge { font: 700 10px var(--mono); color: var(--cms-orange); text-transform: uppercase; }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 5px 11px;
+        border-radius: 9999px;
+        font: 600 11px var(--mono);
+        letter-spacing: 0.5px;
+        background: var(--cms-surface);
+        border: 1px solid var(--cms-border);
+        color: var(--cms-muted);
+      }
+      .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--cms-dim);
+      }
+      .status-pill.connected .status-dot { background: var(--cms-success); box-shadow: 0 0 8px rgba(16, 185, 129, 0.5); }
+      .status-pill.connected { color: #d1fae5; border-color: rgba(16, 185, 129, 0.3); }
+      .status-pill.local .status-dot { background: var(--cms-warning); }
+      .status-pill.local { color: #fef3c7; border-color: rgba(245, 158, 11, 0.3); }
+
+      .draft-badge {
+        display: none;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 11px;
+        border-radius: 9999px;
+        font: 700 11px var(--mono);
+        background: var(--cms-orange-subtle);
+        border: 1px solid var(--cms-orange);
+        color: var(--cms-orange);
+      }
+      .draft-badge.visible { display: inline-flex; }
+
+      /* ------------------------------------------------------------- Buttons */
+      button { font: inherit; cursor: pointer; border: none; background: transparent; }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 700;
+        border-radius: var(--radius);
+        border: 1px solid transparent;
+        transition: all var(--transition);
+        white-space: nowrap;
+      }
+      .btn-primary {
+        background: var(--cms-orange);
+        color: #121110;
+      }
+      .btn-primary:hover {
+        background: var(--cms-orange-hover);
+        box-shadow: 0 4px 14px var(--cms-orange-glow);
+        transform: translateY(-1px);
+      }
+      .btn-outline {
+        border-color: var(--cms-border-light);
+        color: var(--cms-text);
+        background: var(--cms-surface);
+      }
+      .btn-outline:hover {
+        border-color: var(--cms-orange);
+        color: var(--cms-orange);
+      }
+      .btn-danger {
+        border-color: rgba(239, 68, 68, 0.4);
+        color: #fca5a5;
+        background: var(--cms-danger-bg);
+      }
+      .btn-danger:hover {
+        background: rgba(239, 68, 68, 0.25);
+        color: #fff;
+      }
+      .btn-sm {
+        padding: 6px 12px;
+        font-size: 12px;
+        border-radius: 6px;
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+      }
+
+      /* ------------------------------------------------------------- Layout */
+      .cms-layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        min-height: calc(100vh - 61px);
+      }
+      .cms-sidebar {
+        background: var(--cms-surface);
+        border-right: 1px solid var(--cms-border);
+        padding: 20px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .nav-group-title {
+        font: 700 10px var(--mono);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--cms-dim);
+        padding: 12px 14px 4px;
+      }
+      .nav-tab {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 12px;
+        border-radius: var(--radius);
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--cms-muted);
+        transition: all var(--transition);
+        text-align: left;
+        width: 100%;
+      }
+      .nav-tab:hover {
+        color: var(--cms-text);
+        background: rgba(255, 255, 255, 0.04);
+      }
+      .nav-tab.active {
+        background: var(--cms-orange-subtle);
+        color: var(--cms-orange);
+        font-weight: 700;
+      }
+      .nav-tab .icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      .cms-main {
+        padding: 32px 40px 80px;
+        max-width: 1020px;
+      }
+      .panel-header {
+        margin-bottom: 24px;
+      }
+      .panel-header h1 {
+        font-size: 25px;
+        font-weight: 800;
+        letter-spacing: -0.4px;
+        margin-bottom: 4px;
+      }
+      .panel-header p {
+        font-size: 14px;
+        color: var(--cms-muted);
+      }
+
+      /* ------------------------------------------------------------- Cards */
+      .card {
+        background: var(--cms-card);
+        border: 1px solid var(--cms-border);
+        border-radius: var(--radius-lg);
+        padding: 22px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+        transition: border-color var(--transition);
+      }
+      .card-title {
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: -0.2px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .field {
+        margin-bottom: 16px;
+      }
+      .field:last-child {
+        margin-bottom: 0;
+      }
+      .field label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font: 600 11.5px/1 var(--mono);
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: var(--cms-text-sub);
+        margin-bottom: 7px;
+      }
+      .field-row-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .field-row-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 14px;
+      }
+      .field-hint {
+        font: 500 11px var(--mono);
+        color: var(--cms-dim);
+        margin-top: 5px;
+      }
+
+      /* List Row Items */
+      .sub-item-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        padding: 4px 0;
+      }
+      .sub-item-index {
+        font: 700 11px var(--mono);
+        color: var(--cms-dim);
+        width: 24px;
+        text-align: right;
+        flex-shrink: 0;
+      }
+
+      /* Image Pickers */
+      .img-picker-wrap {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 8px;
+      }
+      .img-thumb {
+        width: 80px;
+        height: 60px;
+        border-radius: 6px;
+        border: 1px solid var(--cms-border);
+        background: #000;
+        object-fit: cover;
+      }
+      .img-thumb[src=""], .img-thumb:not([src]) { display: none; }
+
+      /* Modal & Toast */
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(6px);
+        display: none;
+        place-items: center;
+        padding: 20px;
+      }
+      .modal-backdrop.open { display: grid; }
+      .modal-card {
+        background: var(--cms-card);
+        border: 1px solid var(--cms-border-light);
+        border-radius: var(--radius-lg);
+        width: 100%;
+        max-width: 520px;
+        padding: 26px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+      }
+      .modal-card h2 {
+        font-size: 19px;
+        font-weight: 800;
+        margin-bottom: 6px;
+      }
+      .modal-card p {
+        font-size: 13.5px;
+        color: var(--cms-muted);
+        margin-bottom: 18px;
+      }
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+      }
+
+      /* Image Modal Tabs */
+      .gallery-tabs {
+        display: flex;
+        gap: 6px;
+        border-bottom: 1px solid var(--cms-border);
+        padding-bottom: 10px;
+        margin-bottom: 14px;
+      }
+      .g-tab {
+        padding: 7px 14px;
+        border-radius: var(--radius);
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--cms-muted);
+        background: transparent;
+        transition: all var(--transition);
+      }
+      .g-tab:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+      .g-tab.active { background: var(--cms-orange-subtle); color: var(--cms-orange); }
+
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 10px;
+        max-height: 380px;
+        overflow-y: auto;
+        padding: 4px;
+      }
+      .gallery-item {
+        border: 2px solid var(--cms-border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        cursor: pointer;
+        background: var(--cms-surface);
+        transition: all 0.15s;
+        text-align: center;
+      }
+      .gallery-item:hover {
+        border-color: var(--cms-orange);
+        transform: translateY(-2px);
+      }
+      .gallery-item img {
+        width: 100%;
+        height: 80px;
+        object-fit: cover;
+        display: block;
+      }
+      .gallery-item span {
+        display: block;
+        font: 600 10px var(--mono);
+        padding: 5px 6px;
+        color: var(--cms-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .upload-dropzone {
+        border: 2px dashed var(--cms-border-light);
+        border-radius: var(--radius-lg);
+        padding: 36px 20px;
+        text-align: center;
+        background: var(--cms-surface);
+        transition: all var(--transition);
+      }
+      .upload-dropzone:hover { border-color: var(--cms-orange); }
+
+      .toast {
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        z-index: 300;
+        padding: 12px 20px;
+        border-radius: var(--radius);
+        font-size: 13px;
+        font-weight: 600;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        animation: toastIn 0.25s ease;
+      }
+      .toast.show { display: flex; }
+      .toast.info { background: #1e293b; color: #f8fafc; border: 1px solid #334155; }
+      .toast.success { background: #064e3b; color: #ecfdf5; border: 1px solid #059669; }
+      .toast.error { background: #7f1d1d; color: #fef2f2; border: 1px solid #dc2626; }
+      @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+      /* Pulse highlight animation for search jump */
+      @keyframes fieldPulse {
+        0% { box-shadow: 0 0 0 0 rgba(244, 115, 33, 0.7); }
+        50% { box-shadow: 0 0 0 6px rgba(244, 115, 33, 0.3); }
+        100% { box-shadow: 0 0 0 0 rgba(244, 115, 33, 0); }
+      }
+      .highlight-pulse { animation: fieldPulse 1.2s ease 2; }
+
+      /* Responsive */
+      @media (max-width: 860px) {
+        .cms-header { flex-wrap: wrap; }
+        .cms-search-box { order: 3; max-width: 100%; width: 100%; margin-top: 6px; }
+        .cms-layout { grid-template-columns: 1fr; }
+        .cms-sidebar { border-right: none; border-bottom: 1px solid var(--cms-border); flex-direction: row; overflow-x: auto; padding: 10px; }
+        .cms-main { padding: 20px 16px; }
+        .field-row-2, .field-row-3 { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Bar -->
+    <header class="cms-header">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <a href="../index.html" class="brand-box" title="View live website">
+          <img src="../images/logo.jpg" alt="More Than Just Subs" class="brand-logo-img" />
+          <div class="brand-info">
+            <span class="brand-title">More Than Just Subs</span>
+            <span class="brand-sub">Website CMS</span>
+          </div>
+        </a>
+        <div class="status-pill local" id="connection-pill">
+          <span class="status-dot"></span>
+          <span id="connection-status">Local File Mode</span>
+        </div>
+        <div class="draft-badge" id="draft-pill">
+          <span id="draft-count">0</span> changes
+        </div>
+      </div>
+
+      <!-- Quick Global Search Bar -->
+      <div class="cms-search-box">
+        <svg class="search-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="search" id="cms-global-search" placeholder="Quick search menu items, pages, hours, reviews..." autocomplete="off" />
+        <div id="cms-search-dropdown" class="cms-search-results" style="display:none;"></div>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn btn-outline btn-sm" id="btn-discard" style="display: none;">Discard</button>
+        <button class="btn btn-outline btn-sm" id="btn-export-json">Export content.json</button>
+        <button class="btn btn-primary btn-sm" id="btn-publish-main">
+          <span>Push to Website</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="cms-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="cms-sidebar">
+        <div class="nav-group-title">Overview</div>
+        <button class="nav-tab active" data-tab="dashboard">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-tab" data-tab="brand">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+          <span>Brand & Contact</span>
+        </button>
+
+        <div class="nav-group-title">Pages</div>
+        <button class="nav-tab" data-tab="home">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+          <span>Home Page</span>
+        </button>
+        <button class="nav-tab" data-tab="about">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"></circle><path d="M6 21v-2a6 6 0 0 1 12 0v2"></path></svg>
+          <span>About Us</span>
+        </button>
+        <button class="nav-tab" data-tab="bread">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 0-7.07 17.07L12 22l7.07-2.93A10 10 0 0 0 12 2z"></path></svg>
+          <span>Our Bread</span>
+        </button>
+        <button class="nav-tab" data-tab="menu">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          <span>Menu Items</span>
+        </button>
+        <button class="nav-tab" data-tab="locations">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          <span>Shops / Locations</span>
+        </button>
+        <button class="nav-tab" data-tab="reviews">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span>Customer Reviews</span>
+        </button>
+
+        <div class="nav-group-title">Configuration</div>
+        <button class="nav-tab" data-tab="settings">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>GitHub Cloud Sync</span>
+        </button>
+      </aside>
+
+      <!-- Main Panel Area -->
+      <main class="cms-main" id="panel-container">
+        <!-- Rendered dynamically by cms.js -->
+      </main>
+    </div>
+
+    <!-- Image Gallery & Upload & Link Picker Modal -->
+    <div class="modal-backdrop" id="cms-gallery-modal">
+      <div class="modal-card" style="max-width: 740px; width: 95%; max-height: 88vh; display: flex; flex-direction: column;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div>
+            <h2 style="font-size: 18px; margin: 0;">Image Selector</h2>
+            <p style="color:var(--cms-muted); font-size: 13px; margin: 2px 0 0;">Pick from brand photos, upload from your device/phone, or paste a link.</p>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" id="gallery-btn-close">✕</button>
+        </div>
+
+        <!-- 3 Modal Tabs -->
+        <div class="gallery-tabs">
+          <button type="button" class="g-tab active" data-gtab="gallery" id="gtab-btn-gallery">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px;"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>Brand Gallery (22)
+          </button>
+          <button type="button" class="g-tab" data-gtab="upload" id="gtab-btn-upload">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>Upload from Device / Phone
+          </button>
+          <button type="button" class="g-tab" data-gtab="link" id="gtab-btn-link">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>Add via Link / URL
+          </button>
+        </div>
+
+        <!-- Tab 1: Gallery -->
+        <div id="gtab-view-gallery" class="gtab-view" style="display:block;">
+          <div class="gallery-grid" id="gallery-grid"></div>
+        </div>
+
+        <!-- Tab 2: Upload from Device / Phone -->
+        <div id="gtab-view-upload" class="gtab-view" style="display:none;">
+          <div class="upload-dropzone" id="upload-dropzone">
+            <svg style="width:44px;height:44px;color:var(--cms-orange);margin-bottom:8px;display:inline-block;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <h3 style="font-size:15px;margin-bottom:4px;">Upload from Desktop or Mobile</h3>
+            <p style="font-size:12.5px;color:var(--cms-muted);margin-bottom:14px;">Select from your computer files or open mobile photo library / camera</p>
+            <input type="file" id="cms-file-uploader" accept="image/*" style="display:none;" />
+            <button type="button" class="btn btn-primary" onclick="document.getElementById('cms-file-uploader').click()">
+              <span>Choose Photo / Take Picture</span>
+            </button>
+          </div>
+          <div id="upload-preview-wrap" style="display:none;margin-top:14px;padding:12px;background:var(--cms-surface);border-radius:8px;border:1px solid var(--cms-border);text-align:center;">
+            <p style="font-size:12px;color:var(--cms-muted);margin-bottom:8px;">Photo Preview:</p>
+            <img id="upload-preview-img" style="max-height:160px;max-width:100%;border-radius:6px;object-fit:cover;" />
+            <div style="margin-top:12px;display:flex;gap:10px;justify-content:center;">
+              <button type="button" class="btn btn-primary" id="btn-confirm-upload">Use This Uploaded Image</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Add via Link / URL -->
+        <div id="gtab-view-link" class="gtab-view" style="display:none;">
+          <div style="padding: 10px 0;">
+            <div class="field">
+              <label>Image Web URL or Relative Path</label>
+              <input type="url" id="input-image-url" placeholder="https://example.com/photo.jpg or images/my-photo.jpg" />
+              <div class="field-hint">Paste an image link from the web, or reference a local file.</div>
+            </div>
+            <div id="link-preview-wrap" style="display:none;margin-top:14px;padding:12px;background:var(--cms-surface);border-radius:8px;border:1px solid var(--cms-border);text-align:center;">
+              <p style="font-size:12px;color:var(--cms-muted);margin-bottom:8px;">Live Preview:</p>
+              <img id="link-preview-img" style="max-height:160px;max-width:100%;border-radius:6px;object-fit:cover;" />
+              <div style="margin-top:12px;">
+                <button type="button" class="btn btn-primary" id="btn-confirm-link">Use This Image URL</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--cms-border);">
+          <span style="font-size:12px;color:var(--cms-muted);">Changes save to draft automatically</span>
+          <button type="button" class="btn btn-outline btn-sm" id="gallery-btn-cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal-backdrop" id="cms-modal">
+      <div class="modal-card">
+        <h2 id="modal-title">Confirm Action</h2>
+        <p id="modal-desc">Are you sure?</p>
+        <div class="modal-actions">
+          <button class="btn btn-outline" id="modal-btn-cancel">Cancel</button>
+          <button class="btn btn-primary" id="modal-btn-confirm">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="cms-toast"></div>
+
+    <script src="cms.js"></script>
+  </body>
+</html>
