@@ -543,6 +543,93 @@
         animation: toastIn 0.25s ease;
       }
       .toast.show { display: flex; }
+
+      /* ------------------------------------------------------------- Auth Gate */
+      #cms-auth-gate {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: var(--cms-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      #cms-auth-gate.hidden { display: none; }
+      .auth-card {
+        background: var(--cms-card);
+        border: 1px solid var(--cms-border-light);
+        border-radius: var(--radius-lg);
+        padding: 40px 36px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 32px 64px rgba(0,0,0,0.6);
+        text-align: center;
+      }
+      .auth-logo {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 28px;
+      }
+      .auth-wordmark {
+        font-family: "DM Sans", sans-serif;
+        font-style: italic;
+        font-weight: 800;
+        line-height: 0.86;
+        text-align: left;
+      }
+      .auth-wordmark span { font-size: 11px; letter-spacing: 0.2em; color: #fff; display: block; }
+      .auth-wordmark strong { font-size: 26px; color: #f47321; display: block; }
+      .auth-subtitle {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--cms-muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-top: 10px;
+      }
+      .auth-heading {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: var(--cms-text);
+      }
+      .auth-desc {
+        font-size: 13px;
+        color: var(--cms-muted);
+        margin-bottom: 24px;
+      }
+      #auth-password-input {
+        text-align: center;
+        letter-spacing: 0.15em;
+        font-size: 16px !important;
+        margin-bottom: 14px;
+      }
+      #auth-error {
+        font-size: 12.5px;
+        color: var(--cms-danger);
+        margin-bottom: 12px;
+        min-height: 18px;
+        font-weight: 600;
+      }
+      .auth-btn {
+        width: 100%;
+        padding: 12px;
+        background: var(--cms-orange);
+        color: #fff;
+        font: 700 15px var(--sans);
+        border: none;
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: background 0.18s;
+      }
+      .auth-btn:hover { background: var(--cms-orange-hover); }
+      .auth-footer {
+        margin-top: 20px;
+        font-size: 11.5px;
+        color: var(--cms-dim);
+      }
       .toast.info { background: #1e293b; color: #f8fafc; border: 1px solid #334155; }
       .toast.success { background: #064e3b; color: #ecfdf5; border: 1px solid #059669; }
       .toast.error { background: #7f1d1d; color: #fef2f2; border: 1px solid #dc2626; }
@@ -568,6 +655,34 @@
     </style>
   </head>
   <body>
+    <!-- ============================================================ Auth Gate -->
+    <div id="cms-auth-gate">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <div class="auth-wordmark">
+            <span>MORE THAN</span>
+            <strong>JUST SUBS</strong>
+          </div>
+          <div class="auth-subtitle">Website CMS</div>
+        </div>
+        <h1 class="auth-heading">Staff Access Only</h1>
+        <p class="auth-desc">Paste your GitHub Fine-Grained Personal Access Token to unlock the dashboard. Your token is verified against GitHub in real time.</p>
+        <input
+          type="password"
+          id="auth-password-input"
+          placeholder="github_pat_..."
+          autocomplete="off"
+          spellcheck="false"
+          style="letter-spacing:0.04em;font-family:var(--mono);font-size:13px !important;"
+        />
+        <div id="auth-error"></div>
+        <button class="auth-btn" id="auth-submit-btn" onclick="CMS_AUTH.attempt()">
+          Unlock Dashboard
+        </button>
+        <p class="auth-footer">Token must have <strong style="color:#f47321">Contents: Read &amp; write</strong> permission on this repository.<br>It is saved to your browser — you won't need to re-enter it next time.</p>
+      </div>
+    </div>
+
     <!-- Top Bar -->
     <header class="cms-header">
       <div style="display: flex; align-items: center; gap: 16px;">
@@ -745,5 +860,95 @@
     <div class="toast" id="cms-toast"></div>
 
     <script src="cms.js"></script>
+
+    <!-- Auth Gate Logic -->
+    <script>
+      (() => {
+        const TOKEN_KEY    = "mtjs_island_gh_token";
+        const OWNER_KEY    = "mtjs_island_gh_owner";
+        const REPO_KEY     = "mtjs_island_gh_repo";
+        const BRANCH_KEY   = "mtjs_island_gh_branch";
+        const AUTH_SESSION = "mtjs_cms_authed";
+
+        const gate    = document.getElementById("cms-auth-gate");
+        const input   = document.getElementById("auth-password-input");
+        const errorEl = document.getElementById("auth-error");
+        const btn     = document.getElementById("auth-submit-btn");
+
+        // If token already in localStorage and session is valid, skip gate
+        const savedToken = localStorage.getItem(TOKEN_KEY);
+        if (savedToken && sessionStorage.getItem(AUTH_SESSION) === "1") {
+          gate.classList.add("hidden");
+        } else {
+          // Pre-fill if a token was previously saved
+          if (savedToken) input.value = savedToken;
+          setTimeout(() => input.focus(), 80);
+        }
+
+        async function attemptAuth() {
+          const token = input.value.trim();
+          if (!token) { errorEl.textContent = "Please paste your GitHub Fine-Grained PAT."; return; }
+          if (!token.startsWith("github_pat_") && !token.startsWith("ghp_")) {
+            errorEl.textContent = "That doesn't look like a GitHub PAT (should start with github_pat_ or ghp_).";
+            return;
+          }
+
+          btn.textContent = "Verifying with GitHub...";
+          btn.disabled = true;
+          errorEl.textContent = "";
+
+          try {
+            // 1. Validate the token is a real GitHub credential
+            const userRes = await fetch("https://api.github.com/user", {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/vnd.github+json",
+                "X-GitHub-Api-Version": "2022-11-28"
+              }
+            });
+
+            if (!userRes.ok) {
+              throw new Error("Token rejected by GitHub (invalid or expired).");
+            }
+            const user = await userRes.json();
+
+            // 2. Confirm it can access the repo (content.json)
+            const owner = localStorage.getItem(OWNER_KEY) || "codemdragon";
+            const repo  = localStorage.getItem(REPO_KEY)  || "More-Than-Just-Subs";
+            const branch = localStorage.getItem(BRANCH_KEY) || "main";
+
+            const repoRes = await fetch(
+              `https://api.github.com/repos/${owner}/${repo}/contents/content.json?ref=${branch}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  Accept: "application/vnd.github+json",
+                  "X-GitHub-Api-Version": "2022-11-28"
+                }
+              }
+            );
+
+            if (!repoRes.ok) {
+              throw new Error(`Token valid but can't access ${owner}/${repo}. Check repo name or token permissions (needs Contents: Read & write).`);
+            }
+
+            // 3. Persist token and mark session as authenticated
+            localStorage.setItem(TOKEN_KEY, token);
+            sessionStorage.setItem(AUTH_SESSION, "1");
+
+            // 4. Unlock the CMS
+            gate.classList.add("hidden");
+
+          } catch (err) {
+            errorEl.textContent = err.message || "Authentication failed. Please try again.";
+            btn.textContent = "Unlock Dashboard";
+            btn.disabled = false;
+          }
+        }
+
+        window.CMS_AUTH = { attempt: attemptAuth };
+        input.addEventListener("keydown", (e) => { if (e.key === "Enter") attemptAuth(); });
+      })();
+    </script>
   </body>
 </html>

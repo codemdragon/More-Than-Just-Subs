@@ -12,7 +12,7 @@
   const BRANCH_KEY = "mtjs_island_gh_branch";
 
   let REPO_OWNER = localStorage.getItem(OWNER_KEY) || "codemdragon";
-  let REPO_NAME = localStorage.getItem(REPO_KEY) || "morethanjustsubs";
+  let REPO_NAME = localStorage.getItem(REPO_KEY) || "More-Than-Just-Subs";
   let BRANCH = localStorage.getItem(BRANCH_KEY) || "main";
   let FILE_PATH = "content.json";
 
@@ -1384,7 +1384,7 @@
     saveSettings() {
       const token = document.getElementById("input-token").value.trim();
       const owner = document.getElementById("input-owner").value.trim() || "codemdragon";
-      const repo = document.getElementById("input-repo").value.trim() || "morethanjustsubs";
+      const repo = document.getElementById("input-repo").value.trim() || "More-Than-Just-Subs";
       const branch = document.getElementById("input-branch").value.trim() || "main";
 
       localStorage.setItem(TOKEN_KEY, token);
