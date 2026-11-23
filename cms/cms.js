@@ -1547,6 +1547,14 @@
     }
   };
 
+  // Expose a setter so the auth gate can inject the token into the CMS runtime
+  CMS.setToken = function (token) {
+    ghToken = token;
+    // If the Settings panel is currently rendered, update its input live
+    const settingsInput = document.getElementById("input-token");
+    if (settingsInput) settingsInput.value = token;
+  };
+
   window.CMS = CMS;
   document.addEventListener("DOMContentLoaded", () => CMS.init());
 })();

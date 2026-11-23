@@ -643,14 +643,164 @@
       }
       .highlight-pulse { animation: fieldPulse 1.2s ease 2; }
 
-      /* Responsive */
+      /* ------------------------------------------------------------- Mobile Nav Drawer */
+      .hamburger-btn {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: var(--radius);
+        background: transparent;
+        color: var(--cms-text);
+        border: 1px solid var(--cms-border);
+        flex-shrink: 0;
+        transition: background var(--transition);
+      }
+      .hamburger-btn:hover { background: rgba(255,255,255,0.06); }
+
+      .nav-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 149;
+        background: rgba(0,0,0,0.55);
+        backdrop-filter: blur(3px);
+      }
+      .nav-overlay.open { display: block; }
+
+      /* ------------------------------------------------------------- Responsive */
       @media (max-width: 860px) {
-        .cms-header { flex-wrap: wrap; }
-        .cms-search-box { order: 3; max-width: 100%; width: 100%; margin-top: 6px; }
-        .cms-layout { grid-template-columns: 1fr; }
-        .cms-sidebar { border-right: none; border-bottom: 1px solid var(--cms-border); flex-direction: row; overflow-x: auto; padding: 10px; }
-        .cms-main { padding: 20px 16px; }
+
+        /* ---- Header ---- */
+        .cms-header {
+          padding: 10px 14px;
+          gap: 10px;
+          flex-wrap: nowrap;
+        }
+        .hamburger-btn { display: flex; }
+
+        /* Hide search bar in header on mobile — moved to drawer */
+        .cms-search-box { display: none; }
+
+        /* Collapse header actions: hide Export, keep Push */
+        .header-actions { gap: 6px; }
+        #btn-export-json { display: none !important; }
+        #btn-discard { display: none !important; }
+        .btn-primary.btn-sm { font-size: 12px; padding: 7px 12px; }
+
+        /* Shrink brand info */
+        .brand-info { display: none; }
+
+        /* Status pill compact */
+        .status-pill { font-size: 11px; padding: 3px 8px; }
+        .draft-badge { font-size: 11px; padding: 2px 7px; }
+
+        /* ---- Layout: stack sidebar below header ---- */
+        .cms-layout {
+          grid-template-columns: 1fr;
+          position: relative;
+        }
+
+        /* ---- Sidebar: slide-in drawer ---- */
+        .cms-sidebar {
+          position: fixed;
+          top: 0;
+          left: -260px;
+          width: 240px;
+          height: 100dvh;
+          z-index: 150;
+          border-right: 1px solid var(--cms-border-light);
+          border-bottom: none;
+          flex-direction: column;
+          overflow-y: auto;
+          overflow-x: hidden;
+          padding: 16px 10px 32px;
+          gap: 2px;
+          transition: left 0.26s cubic-bezier(0.4,0,0.2,1);
+          box-shadow: 4px 0 32px rgba(0,0,0,0.5);
+        }
+        .cms-sidebar.open { left: 0; }
+
+        /* Search bar inside drawer (top of sidebar on mobile) */
+        .cms-sidebar .mobile-search-wrap {
+          display: block;
+          margin-bottom: 8px;
+          padding: 0 4px 10px;
+          border-bottom: 1px solid var(--cms-border);
+        }
+        .cms-sidebar .mobile-search-wrap input {
+          width: 100%;
+          padding: 9px 12px 9px 34px !important;
+          font-size: 13px !important;
+          background: #101115 !important;
+        }
+        .cms-sidebar .mobile-search-wrap .mobile-search-icon {
+          position: absolute;
+          left: 15px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 15px;
+          height: 15px;
+          color: var(--cms-dim);
+          pointer-events: none;
+        }
+        .cms-sidebar .mobile-search-wrap { position: relative; }
+
+        /* Nav tabs larger touch targets */
+        .nav-tab { padding: 11px 12px; font-size: 14px; }
+        .nav-group-title { font-size: 9.5px; padding: 14px 14px 4px; }
+
+        /* ---- Main content ---- */
+        .cms-main { padding: 18px 14px 80px; }
+
+        /* ---- Cards & fields ---- */
+        .card { padding: 16px; }
         .field-row-2, .field-row-3 { grid-template-columns: 1fr; }
+
+        /* ---- Dashboard quick-edit store hours ---- */
+        .hours-quick-grid { grid-template-columns: 1fr !important; }
+
+        /* ---- Dashboard stat cards ---- */
+        .stat-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+        /* ---- Bottom toolbar for primary action ---- */
+        .mobile-bottom-bar {
+          display: flex;
+          position: fixed;
+          bottom: 0; left: 0; right: 0;
+          z-index: 120;
+          background: rgba(18,19,22,0.97);
+          border-top: 1px solid var(--cms-border);
+          padding: 10px 14px 12px;
+          gap: 10px;
+          backdrop-filter: blur(10px);
+        }
+        .mobile-bottom-bar button { flex: 1; }
+
+        /* ---- Toast: pin to bottom-centre above bar ---- */
+        .toast { bottom: 72px; right: 14px; left: 14px; justify-content: center; font-size: 12.5px; }
+
+        /* ---- Modals: full-height on small screens ---- */
+        .modal-backdrop { padding: 0; align-items: flex-end; }
+        .modal-card {
+          border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+          max-height: 92dvh;
+          overflow-y: auto;
+        }
+
+        /* ---- Image picker gallery: 2 cols ---- */
+        .gallery-grid { grid-template-columns: repeat(2, 1fr) !important; max-height: 52dvh; }
+        .gallery-tabs { flex-wrap: wrap; gap: 4px; }
+        .g-tab { font-size: 11px; padding: 6px 10px; }
+
+        /* ---- Auth gate ---- */
+        .auth-card { padding: 28px 20px; }
+      }
+
+      @media (max-width: 400px) {
+        .stat-grid { grid-template-columns: 1fr !important; }
+        .cms-main { padding: 14px 10px 80px; }
       }
     </style>
   </head>
@@ -683,9 +833,18 @@
       </div>
     </div>
 
+    <!-- Mobile nav overlay -->
+    <div class="nav-overlay" id="nav-overlay"></div>
+
     <!-- Top Bar -->
     <header class="cms-header">
-      <div style="display: flex; align-items: center; gap: 16px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <!-- Hamburger (mobile only) -->
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Open menu" title="Menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
         <a href="../index.html" class="brand-box" title="View live website">
           <img src="../images/logo.jpg" alt="More Than Just Subs" class="brand-logo-img" />
           <div class="brand-info">
@@ -720,7 +879,12 @@
 
     <div class="cms-layout">
       <!-- Sidebar Navigation -->
-      <aside class="cms-sidebar">
+      <aside class="cms-sidebar" id="cms-sidebar">
+        <!-- Mobile: search bar at top of drawer -->
+        <div class="mobile-search-wrap">
+          <svg class="mobile-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="search" id="cms-global-search-mobile" placeholder="Search menu, hours, pages…" autocomplete="off" />
+        </div>
         <div class="nav-group-title">Overview</div>
         <button class="nav-tab active" data-tab="dashboard">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
@@ -857,9 +1021,65 @@
     </div>
 
     <!-- Toast Notification -->
+    <!-- Mobile bottom action bar -->
+    <div class="mobile-bottom-bar" id="mobile-bottom-bar">
+      <button class="btn btn-outline btn-sm" id="mobile-btn-export" onclick="CMS.exportJson()">Export JSON</button>
+      <button class="btn btn-primary btn-sm" id="mobile-btn-publish" onclick="CMS.pushToGitHub()">
+        <span>Push to Website</span>
+      </button>
+    </div>
+
     <div class="toast" id="cms-toast"></div>
 
     <script src="cms.js"></script>
+
+    <!-- Mobile nav drawer JS -->
+    <script>
+      (() => {
+        const hamburger = document.getElementById('hamburger-btn');
+        const sidebar   = document.getElementById('cms-sidebar');
+        const overlay   = document.getElementById('nav-overlay');
+
+        function openDrawer() {
+          sidebar.classList.add('open');
+          overlay.classList.add('open');
+          document.body.style.overflow = 'hidden';
+        }
+        function closeDrawer() {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+
+        hamburger?.addEventListener('click', openDrawer);
+        overlay?.addEventListener('click', closeDrawer);
+
+        // Close drawer when a nav tab is tapped
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+          tab.addEventListener('click', () => {
+            if (window.innerWidth <= 860) closeDrawer();
+          });
+        });
+
+        // Wire mobile search to same handler as desktop search
+        const mobileSearch = document.getElementById('cms-global-search-mobile');
+        const desktopSearch = document.getElementById('cms-global-search');
+        if (mobileSearch && desktopSearch) {
+          mobileSearch.addEventListener('input', () => {
+            desktopSearch.value = mobileSearch.value;
+            desktopSearch.dispatchEvent(new Event('input'));
+          });
+        }
+
+        // Hide mobile bottom bar on desktop
+        function checkBar() {
+          const bar = document.getElementById('mobile-bottom-bar');
+          if (bar) bar.style.display = window.innerWidth <= 860 ? 'flex' : 'none';
+        }
+        checkBar();
+        window.addEventListener('resize', checkBar);
+      })();
+    </script>
 
     <!-- Auth Gate Logic -->
     <script>
@@ -938,6 +1158,11 @@
 
             // 4. Unlock the CMS
             gate.classList.add("hidden");
+
+            // 5. Push token into CMS runtime so GitHub Sync Settings shows it immediately
+            if (window.CMS && window.CMS.setToken) {
+              window.CMS.setToken(token);
+            }
 
           } catch (err) {
             errorEl.textContent = err.message || "Authentication failed. Please try again.";
